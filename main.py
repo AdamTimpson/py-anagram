@@ -3,31 +3,21 @@ import random
 
 WORD_FILE = "./words.txt"
 
-def get_random_index(word, indexes_used):
+def scramble(word): 
+    chars = list(word)
+    random.shuffle(chars)
+    result = "".join(chars)
 
-    random_index = random.randint(0, len(word) - 1)
-    if random_index in indexes_used:
-        return get_random_index(word, indexes_used)
-
-    indexes_used.append(random_index)
-    return random_index
-
-
-def scramble(word):
-    result = ""
-
-    used_indexes = []
-    for char in word:
-        random_index = get_random_index(word, used_indexes)
-        result += word[random_index]
-
-
-    print(used_indexes)
-    return result
-        
+    return result if result != word else scramble(word)
 
 if __name__ == "__main__":
     words = word_manager.load_word_file(WORD_FILE)
 
-    for word in words:
-        print(f"{word} --- {scramble(word)}\n")
+    answer = words[random.randint(0, len(words) - 1)]
+    print(f"{answer} --- {scramble(answer)}\n")
+
+    guess = input("Guess: ")
+    if guess == answer:
+        print("WINNER")
+    else:
+        print("Try again!")
